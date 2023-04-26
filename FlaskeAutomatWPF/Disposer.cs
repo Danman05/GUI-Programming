@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,34 +17,36 @@ namespace FlaskeAutomatWPF
             {
                 try
                 {
-                    if (Monitor.TryEnter(Soda.sodaQ))
+                    Monitor.Enter(Soda.sodaQ);
+                    // start disposing soda
+                    if (Soda.sodaQ.Count >= 10)
                     {
-                        // start disposing soda
-                        if (Soda.sodaQ.Count >= 10)
+                        Debug.WriteLine("[Info] Disposing soda");
+                        for (int i = 0; i < 10; i++)
                         {
-                            Console.WriteLine("[Info] Disposing soda");
-                            for (int i = 0; i < 10; i++)
-                            {
-                                Soda.sodaQ.Dequeue();
-                            }
+                            Soda.sodaQ.Dequeue();
                         }
-                        Monitor.Exit(Soda.sodaQ);
                     }
-                    if (Monitor.TryEnter(Beer.beerQ))
+
+
+                    Monitor.Enter(Beer.beerQ);
+                    if (Beer.beerQ.Count >= 10)
                     {
-                        if (Beer.beerQ.Count >= 10)
+                        Debug.WriteLine("[Info] Disposing beer");
+                        for (int i = 0; i < 10; i++)
                         {
-                            Console.WriteLine("[Info] Disposing beer");
-                            for (int i = 0; i < 10; i++)
-                            {
-                                Beer.beerQ.Dequeue();
-                            }
+                            Beer.beerQ.Dequeue();
                         }
-                        Monitor.Exit(Beer.beerQ);
                     }
+
+
                 }
                 finally
                 {
+                        Monitor.Exit(Soda.sodaQ);
+
+                        Monitor.Exit(Beer.beerQ);
+
                     Thread.Sleep(500);
                 }
             }

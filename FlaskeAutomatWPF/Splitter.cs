@@ -9,8 +9,8 @@ namespace FlaskeAutomatWPF
 {
     internal class Splitter
     {
-        public static void SplitterConsumer()
-        {
+        public void SplitterConsumer()
+        {                   
             Drink drink;
             while (true)
             {
@@ -24,16 +24,18 @@ namespace FlaskeAutomatWPF
                         }
                         else
                         {
-
                             // Check drink type
                             drink = Drink.drinkQ.Dequeue();
 
                             if (drink.Name == "soda")
                             {
+                                Monitor.Enter(Soda.sodaQ);
                                 Soda.sodaQ.Enqueue((Soda)drink);
+                                
                             }
                             else if (drink.Name == "beer")
                             {
+                                Monitor.Enter(Beer.beerQ);
                                 Beer.beerQ.Enqueue(((Beer)drink));
                             }
                             else
@@ -46,8 +48,15 @@ namespace FlaskeAutomatWPF
                 }
                 finally
                 {
+
                     if (Monitor.IsEntered(Drink.drinkQ))
                         Monitor.Exit(Drink.drinkQ);
+
+                    if (Monitor.IsEntered(Soda.sodaQ))
+                        Monitor.Exit(Soda.sodaQ);
+
+                    if (Monitor.IsEntered(Beer.beerQ))
+                        Monitor.Exit(Beer.beerQ);
 
                     Thread.Sleep(500);
                 }

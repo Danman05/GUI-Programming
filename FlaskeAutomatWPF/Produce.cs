@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace FlaskeAutomatWPF
 {
@@ -14,8 +15,6 @@ namespace FlaskeAutomatWPF
 
         public static void ProduceBottle()
         {
-            MainWindow main = new MainWindow();
-           
             Random random = new();
             int randomNum;
             string writeProduceString = "";
@@ -50,10 +49,8 @@ namespace FlaskeAutomatWPF
                 }
                 finally
                 {
-                    main.sodaCounter.Content = $"{Drink.drinkQ.Count}";
+
                     Debug.WriteLine($"Unsorted bottles: {Drink.drinkQ.Count}");
-                    Debug.WriteLine($"Soda bottles: {Soda.sodaQ.Count}");
-                    Debug.WriteLine($"Beer bottles: {Beer.beerQ.Count}");
                     Debug.WriteLine($"{writeProduceString}");
                     Monitor.Exit(Drink.drinkQ);
                     Thread.Sleep(500);
