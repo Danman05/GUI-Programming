@@ -12,6 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace FlaskeAutomatWPF
 {
@@ -23,6 +27,21 @@ namespace FlaskeAutomatWPF
         public MainWindow()
         {
             InitializeComponent();
+            
         }
+
+        private void StartProduceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Thread producerThread = new(Produce.ProduceBottle);
+            Thread splitterConsumerThread = new(Splitter.SplitterConsumer);
+            Thread consumerDrinkThread = new(Disposer.DisposeBottle);
+
+            producerThread.Start();
+            splitterConsumerThread.Start();
+            consumerDrinkThread.Start();
+            
+        }
+
+
     }
 }

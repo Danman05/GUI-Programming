@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Button x:Name="StartProduceBtn" Content="Start Produce" HorizontalAlignment="Left" Margin="21,28,0,0" VerticalAlignment="Top" Height="54" Width="102" Click="StartProduceBtn_Click"/>
+        <Label x:Name="sodaCounter" Content="Soda count: " HorizontalAlignment="Left" Margin="288,174,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="beerCounter" Content="Beer count: " HorizontalAlignment="Left" Margin="291,288,0,0" VerticalAlignment="Top"/>
+        <Image HorizontalAlignment="Left" Height="50" Margin="302,238,0,0" VerticalAlignment="Top" Width="50" Source="/beerCan.png" RenderTransformOrigin="-0.23,0.39"/>
+        <Image HorizontalAlignment="Left" Height="50" Margin="301,119,0,0" VerticalAlignment="Top" Width="50" Source="/sodaCan.png"/>
 
     </Grid>
 </Window>
