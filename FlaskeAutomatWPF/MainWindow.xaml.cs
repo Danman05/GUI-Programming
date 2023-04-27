@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
+using System.Buffers.Text;
 
 namespace FlaskeAutomatWPF
 {
@@ -28,7 +29,6 @@ namespace FlaskeAutomatWPF
         public MainWindow()
         {
             InitializeComponent();
-
         }
 
         private void StartProduceBtn_Click(object sender, RoutedEventArgs e)
@@ -40,6 +40,8 @@ namespace FlaskeAutomatWPF
             producerThread.Start();
             splitterConsumerThread.Start();
             consumerDrinkThread.Start();
+
+
         }
 
         public void SplitterConsumer()
@@ -59,18 +61,26 @@ namespace FlaskeAutomatWPF
                     {
                         // Check drink type
                         drink = Drink.drinkQ.Dequeue();
-
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            DataContext = this;
+                        }));
                         if (drink.Name == "soda")
                         {
-                            Monitor.Enter(Soda.sodaQ);
-                            Soda.sodaQ.Enqueue((Soda)drink);
-                            sodaLabel.Dispatcher.Invoke(new Action(() => sodaLabel.Content = "Soda bottle: " + Soda.sodaQ.Count.ToString()));
+                            
+                            Monitor.Enter(Splitter.sodaQ);
+
+                            AnimateSoda();
+
+                            Splitter.sodaQ.Enqueue((Soda)drink);
+
+                            sodaLabel.Dispatcher.Invoke(new Action(() => sodaLabel.Content = "Soda bottle: " + Splitter.sodaQ.Count.ToString()));
                         }
                         else if (drink.Name == "beer")
                         {
-                            Monitor.Enter(Beer.beerQ);
-                            Beer.beerQ.Enqueue(((Beer)drink));
-                            beerLabel.Dispatcher.Invoke(new Action(() => beerLabel.Content = "Beer bottle: " + Beer.beerQ.Count.ToString()));
+                            Monitor.Enter(Splitter.beerQ);
+                            Splitter.beerQ.Enqueue(((Beer)drink));
+                            beerLabel.Dispatcher.Invoke(new Action(() => beerLabel.Content = "Beer bottle: " + Splitter.beerQ.Count.ToString()));
                         }
                         else
                         {
@@ -85,11 +95,11 @@ namespace FlaskeAutomatWPF
                     unsortedLabel.Dispatcher.Invoke(new Action(() => unsortedLabel.Content = "Unsorted bottles: " + Drink.drinkQ.Count.ToString()));
                     Monitor.Exit(Drink.drinkQ);
 
-                    if (Monitor.IsEntered(Soda.sodaQ))
-                        Monitor.Exit(Soda.sodaQ);
+                    if (Monitor.IsEntered(Splitter.sodaQ))
+                        Monitor.Exit(Splitter.sodaQ);
 
-                    else if (Monitor.IsEntered(Beer.beerQ))
-                        Monitor.Exit(Beer.beerQ);
+                    else if (Monitor.IsEntered(Splitter.beerQ))
+                        Monitor.Exit(Splitter.beerQ);
 
                     Thread.Sleep(500);
                 }
@@ -97,5 +107,69 @@ namespace FlaskeAutomatWPF
             }
         }
 
+        void AnimateSoda()
+        {
+            double originalLeft = 0;
+            double originalTop = 0;
+
+            double currentLeft;
+            double currentTop;
+
+            Dispatcher.Invoke(new Action(() =>
+            {
+                Image img = new Image
+                {
+                    //Visibility = Visibility.Visible,
+                    Height = 50,
+                    Width = 50,
+                    //Margin = new Thickness(130, 160, 542, 163),
+                    Source = new BitmapImage(new Uri("H:\\Skole\\H2\\Kodning\\GUI-Programming\\FlaskeAutomatWPF\\Ressource\\sodaCan.png", UriKind.Relative))
+
+                };
+                Canvas.SetLeft(img, 50);
+                Canvas.SetTop(img, 50);
+
+
+                //ok.Children.Add(img);
+
+                //MainGrid.Children.Add(img);
+
+            }));
+            Dispatcher.Invoke(new Action(() =>
+            {
+                sodaCanImg.Visibility = Visibility.Visible;
+                originalLeft = Canvas.GetLeft(sodaCanImg);
+                originalTop = Canvas.GetTop(sodaCanImg);
+            }));
+            for (int i = 0; i < 18; i++)
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    currentLeft = Canvas.GetLeft(sodaCanImg);
+
+                    Canvas.SetLeft(sodaCanImg, currentLeft + 10);
+                }));
+                Thread.Sleep(50);
+            }
+            for (int i = 0; i < 12; i++)
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    currentTop = Canvas.GetTop(sodaCanImg);
+
+                    Canvas.SetTop(sodaCanImg, currentTop - 10);
+                }));
+                Thread.Sleep(50);
+            }
+
+            Dispatcher.Invoke(new Action(() =>
+            {
+                sodaCanImg.Visibility = Visibility.Hidden;
+                Canvas.SetLeft(sodaCanImg, originalLeft);
+                Canvas.SetTop(sodaCanImg, originalTop);
+
+            }));
+
+        }
     }
 }

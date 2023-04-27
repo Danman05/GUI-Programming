@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FlaskeAutomatWPF
 {
@@ -17,25 +18,25 @@ namespace FlaskeAutomatWPF
             {
                 try
                 {
-                    Monitor.Enter(Soda.sodaQ);
+                    Monitor.Enter(Splitter.sodaQ);
                     // start disposing soda
-                    if (Soda.sodaQ.Count >= 10)
+                    if (Splitter.sodaQ.Count >= 10)
                     {
                         Debug.WriteLine("[Info] Disposing soda");
                         for (int i = 0; i < 10; i++)
                         {
-                            Soda.sodaQ.Dequeue();
+                            Splitter.sodaQ.Dequeue();
                         }
                     }
 
 
-                    Monitor.Enter(Beer.beerQ);
-                    if (Beer.beerQ.Count >= 10)
+                    Monitor.Enter(Splitter.beerQ);
+                    if (Splitter.beerQ.Count >= 10)
                     {
                         Debug.WriteLine("[Info] Disposing beer");
                         for (int i = 0; i < 10; i++)
                         {
-                            Beer.beerQ.Dequeue();
+                            Splitter.beerQ.Dequeue();
                         }
                     }
 
@@ -43,9 +44,9 @@ namespace FlaskeAutomatWPF
                 }
                 finally
                 {
-                        Monitor.Exit(Soda.sodaQ);
+                        Monitor.Exit(Splitter.sodaQ);
 
-                        Monitor.Exit(Beer.beerQ);
+                        Monitor.Exit(Splitter.beerQ);
 
                     Thread.Sleep(500);
                 }

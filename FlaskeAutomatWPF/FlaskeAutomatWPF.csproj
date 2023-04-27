@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="beerCan.png" />
-    <Resource Include="sodaCan.png" />
+    <Resource Include="Ressource\beerCan.png" />
+    <Resource Include="Ressource\sodaCan.png" />
   </ItemGroup>
 
 </Project>

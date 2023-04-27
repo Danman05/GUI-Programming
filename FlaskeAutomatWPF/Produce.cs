@@ -12,7 +12,6 @@ namespace FlaskeAutomatWPF
 {
     internal class Produce
     {
-
         public static void ProduceBottle()
         {
             Random random = new();

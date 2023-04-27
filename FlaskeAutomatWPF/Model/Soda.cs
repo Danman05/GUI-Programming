@@ -8,7 +8,6 @@ namespace FlaskeAutomatWPF
 {
     internal class Soda : Drink
     {
-        public static Queue<Soda> sodaQ = new();
         public Soda() : base("soda")
         {
 
