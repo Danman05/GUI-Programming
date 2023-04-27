@@ -29,6 +29,8 @@ namespace FlaskeAutomatWPF
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new Splitter();
+            // TODO: FInd way to have mutliple dataacontext bindings?
         }
 
         private void StartProduceBtn_Click(object sender, RoutedEventArgs e)
@@ -46,11 +48,13 @@ namespace FlaskeAutomatWPF
 
         public void SplitterConsumer()
         {
+            Splitter pl = new Splitter();
             Drink drink;
             while (true)
             {
                 try
                 {
+
                     Monitor.Enter(Drink.drinkQ);
 
                     if (Drink.drinkQ.Count == 0)
@@ -61,30 +65,21 @@ namespace FlaskeAutomatWPF
                     {
                         // Check drink type
                         drink = Drink.drinkQ.Dequeue();
-                        Dispatcher.Invoke(new Action(() =>
-                        {
-                            DataContext = this;
-                        }));
+
                         if (drink.Name == "soda")
                         {
                             
                             Monitor.Enter(Splitter.sodaQ);
 
-                            AnimateSoda();
+                            //AnimateSoda();
 
                             Splitter.sodaQ.Enqueue((Soda)drink);
 
-                            sodaLabel.Dispatcher.Invoke(new Action(() => sodaLabel.Content = "Soda bottle: " + Splitter.sodaQ.Count.ToString()));
                         }
                         else if (drink.Name == "beer")
                         {
                             Monitor.Enter(Splitter.beerQ);
                             Splitter.beerQ.Enqueue(((Beer)drink));
-                            beerLabel.Dispatcher.Invoke(new Action(() => beerLabel.Content = "Beer bottle: " + Splitter.beerQ.Count.ToString()));
-                        }
-                        else
-                        {
-                            Debug.WriteLine("[Error] - Unknown bottle");
                         }
 
                     }

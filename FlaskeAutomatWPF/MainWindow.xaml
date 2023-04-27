@@ -6,14 +6,21 @@
         xmlns:local="clr-namespace:FlaskeAutomatWPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
     <Grid x:Name="MainGrid">
         <Button x:Name="StartProduceBtn" Content="Start Produce" HorizontalAlignment="Left" Margin="21,28,0,0" VerticalAlignment="Top" Height="54" Width="102" Click="StartProduceBtn_Click"/>
-        <Label x:Name="sodaLabel" Content="Soda count: " HorizontalAlignment="Left" Margin="337,37,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="beerLabel" Content="Beer count: " HorizontalAlignment="Left" Margin="338,352,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="sodaLabel" Content="{Binding SodaQueueCount}" HorizontalAlignment="Left" Margin="337,37,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="beerLabel" Content="{Binding BeerQueueCount}" HorizontalAlignment="Left" Margin="338,352,0,0" VerticalAlignment="Top"/>
         <Image HorizontalAlignment="Left" Height="50" Margin="350,300,0,0" VerticalAlignment="Top" Width="50" Source="Ressource/beerCan.png" RenderTransformOrigin="-0.23,0.39"/>
         <Image HorizontalAlignment="Left" Height="50" Margin="350,70,0,0" VerticalAlignment="Top" Width="50" Source="Ressource/sodaCan.png"/>
         <Label x:Name="unsortedLabel" Content="Unsorted Bottles: " HorizontalAlignment="Left" Margin="57,199,0,0" VerticalAlignment="Top"/>
-        <ListBox ItemsSource="{Binding Sodas}" Margin="604,135,48,134">
+        
+        <!--<StackPanel>
+            <TextBox Text="{Binding sodaQueueCount, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="{Binding Splitter.SodaQueueCount, UpdateSourceTrigger=PropertyChanged}"/>
+            
+        </StackPanel>-->
+        <!--<ListBox ItemsSource="{Binding Sodas}" Margin="604,135,48,134">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -21,7 +28,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox>-->
         <Canvas Margin="130,160,542,163">
             <Image Visibility="Hidden" x:Name="sodaCanImg" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="50" Source="Ressource/sodaCan.png" RenderTransformOrigin="-0.38,0.131" Canvas.Left="38" Canvas.Top="29"/>
 
