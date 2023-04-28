@@ -9,11 +9,13 @@
 
   <ItemGroup>
     <None Remove="beerCan.png" />
+    <None Remove="Ressource\ConveyorBelt.png" />
     <None Remove="sodaCan.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Ressource\beerCan.png" />
+    <Resource Include="Ressource\ConveyorBelt.png" />
     <Resource Include="Ressource\sodaCan.png" />
   </ItemGroup>
 
