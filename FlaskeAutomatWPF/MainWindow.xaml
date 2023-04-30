@@ -12,34 +12,28 @@
         <Button x:Name="StartProduceBtn" Content="Start Produce" HorizontalAlignment="Left" Margin="21,28,0,0" VerticalAlignment="Top" Height="54" Width="102" Click="StartProduceBtn_Click"/>
 
         <Label x:Name="sodaLabel" Content="Soda count:" HorizontalAlignment="Left" Margin="448,10,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding SodaQueueCount}" HorizontalAlignment="Left" Margin="536,23,0,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding SodaQueueCount}" HorizontalAlignment="Left" Margin="514,10,0,0" VerticalAlignment="Top"/>
 
-        <Label x:Name="beerLabel" Content="Beer count:" HorizontalAlignment="Left" Margin="439,398,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding BeerQueueCount}" HorizontalAlignment="Left" Margin="519,411,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="beerLabel" Content="Beer count:" Margin="439,390,0,0" HorizontalAlignment="Left" Width="70" Height="26" VerticalAlignment="Top"/>
+        <Label Content="{Binding BeerQueueCount}" HorizontalAlignment="Left" Margin="504,390,0,0" VerticalAlignment="Top"/>
 
         <Label x:Name="unsortedLabel" Content="Unsorted Bottles: " HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding DrinkQueueCount}" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Center"/>
+        <Label Content="{Binding DrinkQueueCount}" HorizontalAlignment="Left" Margin="114,199,0,0" VerticalAlignment="Top"/>
 
         <Image HorizontalAlignment="Left" Height="50" Margin="459,36,0,0" VerticalAlignment="Top" Width="50" Source="Ressource/sodaCan.png"/>
-        <Image HorizontalAlignment="Left" Height="50" Margin="459,343,0,0" VerticalAlignment="Top" Width="50" Source="Ressource/beerCan.png" RenderTransformOrigin="-0.23,0.39"/>
+        <Image Margin="459,343,0,0" Source="Ressource/beerCan.png" RenderTransformOrigin="-0.23,0.39" HorizontalAlignment="Left" Width="50" Height="50" VerticalAlignment="Top"/>
 
         <Image Source="Ressource/ConveyorBelt.png" Margin="170,185,340,179"/>
-        <Image Source="Ressource/ConveyorBelt.png" Margin="357,189,194,186" RenderTransformOrigin="0.5,0.5"/>
+        <Image Source="Ressource/ConveyorBelt.png" Margin="357,184,194,191" RenderTransformOrigin="0.5,0.5">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-90.396"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
 
-
-
-        <Canvas Margin="130,160,542,163">
-            <Image Visibility="Hidden" x:Name="sodaCanImg" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="50" Source="Ressource/sodaCan.png" RenderTransformOrigin="-0.38,0.131" Canvas.Left="38" Canvas.Top="29"/>
-
-        </Canvas>
-        <Canvas x:Name="ok" Margin="130,145,520,139" Width="150" Height="150">
-
-        </Canvas>
-        <Grid x:Name="otherGrid" Margin="373,131,155,139">
-            <Image Visibility="Hidden" x:Name="sodaImage" Source="Ressource/sodaCan.png" Width="50" Height="50"></Image>
-        </Grid >
-        <Grid x:Name="toku">
-
-        </Grid>
     </Grid>
 </Window>

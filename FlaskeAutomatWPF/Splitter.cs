@@ -16,15 +16,22 @@ namespace FlaskeAutomatWPF
 {
     internal class Splitter : BaseViewModel
     {
-        private MainWindow _mainWindow;
+
+        // Class represents a splitter that takes in drinks from a queue and -
+        // splits them into separate queues for soda and beer
+        // It also updates the queue counts every 500 milliseconds using a timer
 
         public static Queue<Drink> drinkQ = new();
         public static Queue<Soda> sodaQ = new();
         public static Queue<Beer> beerQ = new();
 
+        // The queues for drinks, soda, and beer
+
         private int _sodaQueueCount = sodaQ.Count;
         private int _beerQueueCount = beerQ.Count;
         private int _drinkQueueCount = drinkQ.Count;
+
+        // Properties for accessing the queue counts
 
         public int SodaQueueCount
         {
@@ -62,20 +69,17 @@ namespace FlaskeAutomatWPF
                 }
             }
         }
-
-        public Splitter(MainWindow mainWindow)
-        {
-            //Set up a timer to update the queue count every time
-            this._mainWindow = mainWindow;
-        }
         public Splitter()
         {
+
             //Set up a timer to update the queue count every time
 
             var timer = new System.Timers.Timer(500);
             timer.Elapsed += Timer_Elapsed;
             timer.Start();
         }
+
+        // Timer that updates the queue counts
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -86,44 +90,44 @@ namespace FlaskeAutomatWPF
 
         }
 
-        public void SplitterConsumer()
+        /// <summary>
+        /// Dequeus an drink from the drink queue and puts them into the soda or beer queue based on their type
+        /// </summary>
+        public static void SplitterConsumer()
         {
             Drink drink;
             while (true)
             {
                 try
                 {
-                    if (Monitor.TryEnter(drinkQ))
+                    Monitor.Enter(drinkQ);
+
+                    if (drinkQ.Count == 0)
                     {
-                        if (drinkQ.Count == 0)
+                        Monitor.Wait(drinkQ);
+                    }
+                    else
+                    {
+                        drink = drinkQ.Dequeue();
+
+                        // Check drink type
+
+                        if (drink.Name == "soda")
                         {
-                            Monitor.Wait(drinkQ);
+                            Monitor.Enter(sodaQ);
+                            sodaQ.Enqueue(((Soda)drink));
+
                         }
-                        else
+                        else if (drink.Name == "beer")
                         {
-                            // Check drink type
-                            drink = drinkQ.Dequeue();
-
-                            _mainWindow.AnimateDrink(drink);
-                            if (drink.Name == "soda")
-                            {
-                                Monitor.Enter(sodaQ);
-                                sodaQ.Enqueue(((Soda)drink));
-
-                            }
-                            else if (drink.Name == "beer")
-                            {
-                                Monitor.Enter(beerQ);
-                                beerQ.Enqueue(((Beer)drink));
-                            }
+                            Monitor.Enter(beerQ);
+                            beerQ.Enqueue(((Beer)drink));
                         }
                     }
                 }
                 finally
                 {
-
-                    if (Monitor.IsEntered(drinkQ))
-                        Monitor.Exit(drinkQ);
+                    Monitor.Exit(drinkQ);
 
                     if (Monitor.IsEntered(sodaQ))
                         Monitor.Exit(sodaQ);

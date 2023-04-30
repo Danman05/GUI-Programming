@@ -8,13 +8,26 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace FlaskeAutomatWPF
 {
     internal class Produce
     {
 
-        public void ProduceBottle()
+        // Produce class that continuously monitors drinkQ
+        // It uses Monitor.Enter and Monitor.Exit to synchronize access to the shared queues between threads.
+        // The method runs in an infinite loop with a delay of 500ms between each iteration.
+
+
+        /// <summary>
+        /// produces and enqueues beer and soda bottles in Splitter's drinkQ queue, 
+        /// ensuring that it always contains at least 20 bottles.
+        /// Random object is used to randomly select between beer and soda bottle types.
+        /// </summary>
+        public static void ProduceBottle()
         {
 
             Random random = new();
@@ -26,6 +39,7 @@ namespace FlaskeAutomatWPF
             {
                 try
                 {
+                   
                     Monitor.Enter(Splitter.drinkQ);
                     if (Splitter.drinkQ.Count < 3)
                     {
@@ -53,8 +67,8 @@ namespace FlaskeAutomatWPF
                 finally
                 {
 
-                    //Debug.WriteLine($"Unsorted bottles: {Splitter.drinkQ.Count}");
-                    //Debug.WriteLine($"{writeProduceString}");
+                    Debug.WriteLine($"Unsorted bottles: {Splitter.drinkQ.Count}");
+                    Debug.WriteLine($"{writeProduceString}");
                     Monitor.Exit(Splitter.drinkQ);
                     Thread.Sleep(500);
                 }
